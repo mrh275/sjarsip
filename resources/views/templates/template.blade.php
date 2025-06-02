@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{{ $title }}</title>
+    <title>{{ $title }} | SJ Arsip</title>
 
     <link rel="stylesheet" href="{{ asset('assets/compiled/css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/compiled/css/app-dark.css') }}">
@@ -17,16 +17,16 @@
 
 <body>
     <script src="assets/static/js/initTheme.js"></script>
-    <div id="auth">
 
-        @yield('content')
-    </div>
-    <script src="{{ asset('static/js/components/dark.js') }}"></script>
-    <script src="{{ asset('extensions/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
-    <script src="{{ asset('compiled/js/app.js') }}"></script>
+
+    @yield('content')
+
+    <script src="{{ asset('assets/static/js/components/dark.js') }}"></script>
+    <script src="{{ asset('assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
+    <script src="{{ asset('assets/compiled/js/app.js') }}"></script>
     <!-- Need: Apexcharts -->
-    <script src="{{ asset('extensions/apexcharts/apexcharts.min.js') }}"></script>
-    <script src="{{ asset('static/js/pages/dashboard.js') }}"></script>
+    <script src="{{ asset('assets/extensions/apexcharts/apexcharts.min.js') }}"></script>
+    <script src="{{ asset('assets/static/js/pages/dashboard.js') }}"></script>
 </body>
 
 </html>
