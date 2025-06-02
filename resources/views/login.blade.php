@@ -31,7 +31,7 @@
                             Tampilkan kata sandi
                         </label>
                     </div>
-                    <button class="btn btn-primary btn-block btn-lg shadow-lg mt-5">Log in</button>
+                    <a href="{{ url('/admin/dashboard') }}" class="btn btn-primary btn-block btn-lg shadow-lg mt-5">Log in</a>
                 </form>
             </div>
         </div>
