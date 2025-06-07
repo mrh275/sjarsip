@@ -13,6 +13,7 @@
     @if ($title == 'Login')
         <link rel="stylesheet" crossorigin href="{{ asset('assets/compiled/css/auth.css') }}">
     @endif
+    <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
 </head>
 
 <body>
@@ -27,6 +28,8 @@
     <!-- Need: Apexcharts -->
     <script src="{{ asset('assets/extensions/apexcharts/apexcharts.min.js') }}"></script>
     <script src="{{ asset('assets/static/js/pages/dashboard.js') }}"></script>
+    <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
+    @stack('scripts')
 </body>
 
 </html>
