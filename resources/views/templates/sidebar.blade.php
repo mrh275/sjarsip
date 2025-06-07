@@ -37,7 +37,7 @@
                         </li>
                     </ul>
                 </li>
-                <li class="sidebar-item">
+                <li class="sidebar-item {{ $sidebar == 'laporan' ? 'active' : '' }}">
                     <a href="{{ url('admin/laporan') }}" class="sidebar-link">
                         <i class="fas fa-clipboard-list"></i>
                         <span>Laporan</span>
