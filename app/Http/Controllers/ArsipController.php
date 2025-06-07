@@ -36,4 +36,14 @@ class ArsipController extends Controller
 
         return view('admin.data-arsip', $data);
     }
+
+    public function laporan()
+    {
+        $data = [
+            'title' => 'Laporan',
+            'sidebar' => 'laporan',
+        ];
+
+        return view('admin.laporan', $data);
+    }
 }
