@@ -6,3 +6,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [LoginController::class, 'index']);
 Route::get('/admin/dashboard', [ArsipController::class, 'index']);
+Route::get('/admin/tambah-surat', [ArsipController::class, 'tambahArsip']);
