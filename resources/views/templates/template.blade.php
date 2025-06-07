@@ -13,7 +13,13 @@
     @if ($title == 'Login')
         <link rel="stylesheet" crossorigin href="{{ asset('assets/compiled/css/auth.css') }}">
     @endif
-    <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
+    @if ($sidebar == 'tambah-arsip')
+        <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
+    @endif
+    @if ($sidebar == 'data-arsip')
+        <link rel="stylesheet" href="{{ asset('assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css') }}">
+        <link rel="stylesheet" crossorigin href="{{ asset('assets/compiled/css/table-datatable-jquery.css') }}">
+    @endif
 </head>
 
 <body>
@@ -28,7 +34,6 @@
     <!-- Need: Apexcharts -->
     <script src="{{ asset('assets/extensions/apexcharts/apexcharts.min.js') }}"></script>
     <script src="{{ asset('assets/static/js/pages/dashboard.js') }}"></script>
-    <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
     @stack('scripts')
 </body>
 
