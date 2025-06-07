@@ -1,7 +1,13 @@
 let jquery_datatable = $("#data-arsip").DataTable({
     responsive: true,
-    filter: true,
 })
+
+let customFilter = document.getElementById("custom-filter")
+customFilter.addEventListener('change', function () {
+
+    jquery_datatable.column(3).search(this.value).draw();
+})
+
 let customized_datatable = $("#table2").DataTable({
     responsive: true,
     pagingType: 'simple',
