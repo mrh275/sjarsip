@@ -26,4 +26,14 @@ class ArsipController extends Controller
 
         return view('admin.tambah-arsip', $data);
     }
+
+    public function dataArsip()
+    {
+        $data = [
+            'title' => 'Data Arsip',
+            'sidebar' => 'data-arsip',
+        ];
+
+        return view('admin.data-arsip', $data);
+    }
 }
