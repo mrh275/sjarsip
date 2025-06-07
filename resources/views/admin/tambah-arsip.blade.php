@@ -71,6 +71,7 @@
 @endsection
 
 @push('scripts')
+    <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
     <script>
         Dropzone.options.unggahSurat = {
             url: "{{ url('admin/unggah-surat') }}",
