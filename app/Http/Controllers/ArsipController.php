@@ -11,9 +11,19 @@ class ArsipController extends Controller
 
         $data = [
             'title' => 'Dashboard',
-            'sidebar' => 'active',
+            'sidebar' => 'dashboard',
         ];
 
         return view('admin.dashboard', $data);
+    }
+
+    public function tambahArsip()
+    {
+        $data = [
+            'title' => 'Tambah Arsip',
+            'sidebar' => 'tambah-arsip',
+        ];
+
+        return view('admin.tambah-arsip', $data);
     }
 }
