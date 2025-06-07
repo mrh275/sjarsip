@@ -51,7 +51,6 @@
                                                 <th>Nomor Surat</th>
                                                 <th>Customer</th>
                                                 <th>Bulan Surat</th>
-                                                <th>Status</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -60,147 +59,126 @@
                                                 <td>123/ABC/2023</td>
                                                 <td>PT. Contoh</td>
                                                 <td>2023-01-15</td>
-                                                <td><span class="badge bg-success">Aktif</span></td>
                                             </tr>
                                             <tr>
                                                 <td>ARSIP-002</td>
                                                 <td>456/DEF/2023</td>
                                                 <td>CV. Sample</td>
                                                 <td>2023-02-20</td>
-                                                <td><span class="badge bg-danger">Tidak Aktif</span></td>
                                             </tr>
                                             <tr>
                                                 <td>ARSIP-003</td>
                                                 <td>789/GHI/2023</td>
                                                 <td>UD. Example</td>
                                                 <td>2023-03-10</td>
-                                                <td><span class="badge bg-success">Aktif</span></td>
                                             </tr>
                                             <tr>
                                                 <td>ARSIP-004</td>
                                                 <td>321/JKL/2023</td>
                                                 <td>PT. Demo</td>
                                                 <td>2023-04-05</td>
-                                                <td><span class="badge bg-success">Aktif</span></td>
                                             </tr>
                                             <tr>
                                                 <td>ARSIP-005</td>
                                                 <td>654/MNO/2023</td>
                                                 <td>CV. Test</td>
                                                 <td>2023-05-25</td>
-                                                <td><span class="badge bg-danger">Tidak Aktif</span></td>
                                             </tr>
                                             <tr>
                                                 <td>ARSIP-006</td>
                                                 <td>987/PQR/2023</td>
                                                 <td>UD. Sample</td>
                                                 <td>2023-06-30</td>
-                                                <td><span class="badge bg-success">Aktif</span></td>
                                             </tr>
                                             <tr>
                                                 <td>ARSIP-007</td>
                                                 <td>159/STU/2023</td>
                                                 <td>PT. Example</td>
                                                 <td>2023-07-18</td>
-                                                <td><span class="badge bg-success">Aktif</span></td>
                                             </tr>
                                             <tr>
                                                 <td>ARSIP-008</td>
                                                 <td>753/VWX/2023</td>
                                                 <td>CV. Demo</td>
                                                 <td>2023-08-22</td>
-                                                <td><span class="badge bg-danger">Tidak Aktif</span></td>
                                             </tr>
                                             <tr>
                                                 <td>ARSIP-009</td>
                                                 <td>852/YZ/2023</td>
                                                 <td>UD. Test</td>
                                                 <td>2023-09-12</td>
-                                                <td><span class="badge bg-success">Aktif</span></td>
                                             </tr>
                                             <tr>
                                                 <td>ARSIP-010</td>
                                                 <td>963/ABC/2023</td>
                                                 <td>PT. Contoh</td>
                                                 <td>2023-10-05</td>
-                                                <td><span class="badge bg-success">Aktif</span></td>
                                             </tr>
                                             <tr>
                                                 <td>ARSIP-011</td>
                                                 <td>147/DEF/2023</td>
                                                 <td>CV. Sample</td>
                                                 <td>2023-11-15</td>
-                                                <td><span class="badge bg-danger">Tidak Aktif</span></td>
                                             </tr>
                                             <tr>
                                                 <td>ARSIP-012</td>
                                                 <td>258/GHI/2023</td>
                                                 <td>UD. Example</td>
                                                 <td>2023-12-20</td>
-                                                <td><span class="badge bg-success">Aktif</span></td>
                                             </tr>
                                             <tr>
                                                 <td>ARSIP-013</td>
                                                 <td>369/JKL/2023</td>
                                                 <td>PT. Demo</td>
                                                 <td>2023-01-10</td>
-                                                <td><span class="badge bg-success">Aktif</span></td>
                                             </tr>
                                             <tr>
                                                 <td>ARSIP-014</td>
                                                 <td>741/MNO/2023</td>
                                                 <td>CV. Test</td>
                                                 <td>2023-02-28</td>
-                                                <td><span class="badge bg-danger">Tidak Aktif</span></td>
                                             </tr>
                                             <tr>
                                                 <td>ARSIP-015</td>
                                                 <td>852/PQR/2023</td>
                                                 <td>UD. Sample</td>
                                                 <td>2023-03-15</td>
-                                                <td><span class="badge bg-success">Aktif</span></td>
                                             </tr>
                                             <tr>
                                                 <td>ARSIP-016</td>
                                                 <td>963/STU/2023</td>
                                                 <td>PT. Example</td>
                                                 <td>2023-04-25</td>
-                                                <td><span class="badge bg-success">Aktif</span></td>
                                             </tr>
                                             <tr>
                                                 <td>ARSIP-017</td>
                                                 <td>147/VWX/2023</td>
                                                 <td>CV. Demo</td>
                                                 <td>2023-05-10</td>
-                                                <td><span class="badge bg-danger">Tidak Aktif</span></td>
                                             </tr>
                                             <tr>
                                                 <td>ARSIP-018</td>
                                                 <td>258/YZ/2023</td>
                                                 <td>UD. Test</td>
                                                 <td>2023-06-20</td>
-                                                <td><span class="badge bg-success">Aktif</span></td>
                                             </tr>
                                             <tr>
                                                 <td>ARSIP-019</td>
                                                 <td>369/ABC/2023</td>
                                                 <td>PT. Contoh</td>
                                                 <td>2023-07-30</td>
-                                                <td><span class="badge bg-success">Aktif</span></td>
                                             </tr>
                                             <tr>
                                                 <td>ARSIP-020</td>
                                                 <td>741/DEF/2023</td>
                                                 <td>CV. Sample</td>
                                                 <td>2023-08-05</td>
-                                                <td><span class="badge bg-danger">Tidak Aktif</span></td>
                                             </tr>
                                             <tr>
                                                 <td>ARSIP-021</td>
                                                 <td>852/GHI/2023</td>
                                                 <td>UD. Example</td>
                                                 <td>2023-09-15</td>
-                                                <td><span class="badge bg-success">Aktif</span></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -215,11 +193,7 @@
             <footer>
                 <div class="footer clearfix mb-0 text-muted">
                     <div class="float-start">
-                        <p>2023 &copy; Mazer</p>
-                    </div>
-                    <div class="float-end">
-                        <p>Crafted with <span class="text-danger"><i class="bi bi-heart-fill icon-mid"></i></span>
-                            by <a href="https://saugi.me">Saugi</a></p>
+                        <p>{{ date('Y') }} &copy;</p>
                     </div>
                 </div>
             </footer>
