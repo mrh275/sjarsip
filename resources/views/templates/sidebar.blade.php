@@ -53,7 +53,7 @@
                         <li class="submenu-item {{ $sidebar == 'tambah-arsip' ? 'active' : '' }}">
                             <a href="{{ url('admin/tambah-surat') }}">Tambah Arsip Surat</a>
                         </li>
-                        <li class="submenu-item">
+                        <li class="submenu-item {{ $sidebar == 'data-arsip' ? 'active' : '' }}">
                             <a href="{{ url('admin/data-arsip') }}">Data Arsip</a>
                         </li>
                     </ul>
