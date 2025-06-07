@@ -37,20 +37,20 @@
             <ul class="menu">
                 <li class="sidebar-title">Menu</li>
 
-                <li class="sidebar-item active ">
+                <li class="sidebar-item {{ $sidebar == 'dashboard' ? 'active' : '' }} ">
                     <a href="{{ url('admin/dashboard') }}" class='sidebar-link'>
                         <i class="bi bi-grid-fill"></i>
                         <span>Dashboard</span>
                     </a>
                 </li>
 
-                <li class="sidebar-item has-sub">
+                <li class="sidebar-item has-sub {{ $sidebar == 'tambah-arsip' || $sidebar == 'data-arsip' ? 'active' : '' }}">
                     <a href="javascript:void(0)" class='sidebar-link'>
                         <i class="fas fa-archive"></i>
                         <span>Data Arsip</span>
                     </a>
-                    <ul class="submenu">
-                        <li class="submenu-item">
+                    <ul class="submenu {{ $sidebar == 'tambah-arsip' ? 'submenu-open' : '' }}">
+                        <li class="submenu-item {{ $sidebar == 'tambah-arsip' ? 'active' : '' }}">
                             <a href="{{ url('admin/tambah-surat') }}">Tambah Arsip Surat</a>
                         </li>
                         <li class="submenu-item">
