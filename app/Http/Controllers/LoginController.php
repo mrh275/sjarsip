@@ -10,6 +10,7 @@ class LoginController extends Controller
     {
         $data = [
             'title' => 'Login',
+            'sidebar' => 'login',
         ];
         return view('login', $data);
     }
