@@ -62,7 +62,7 @@
                                                     <td>{{ $arsip->customer }}</td>
                                                     <td>{{ date('d-m-Y', strtotime($arsip->tanggal_surat)) }}</td>
                                                     <td>
-                                                        <button type="button" class="btn btn-warning" id="edit">
+                                                        <button type="button" class="btn btn-warning" id="edit" data-bs-toggle="modal" data-bs-target="#editModal" value="{{ $arsip->kode_surat }}">
                                                             <i class="fa fa-edit"></i>
                                                         </button>
                                                         <button type="button" class="btn btn-danger" id="delete" value="{{ $arsip->kode_surat }}">
@@ -88,6 +88,54 @@
                     </div>
                 </div>
             </footer>
+        </div>
+    </div>
+    <!-- Vertically Centered modal Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">Edit Data Arsip
+                    </h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <i data-feather="x"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <span class="badge bg-primary">Kode Surat: <span id="kodeSurat"></span></span>
+                    <div class="row my-3">
+                        <h6>Masukan rincian data surat yang akan diubah</h6>
+
+                        <div class="col-12 my-4">
+                            <form action="{{ url('admin/update-arsip') }}" method="POST" id="edit-surat">
+                                @csrf
+                                <div class="mb-3 form-group">
+                                    <label for="no_surat_jalan" class="form-label">Nomor Surat</label>
+                                    <input type="text" class="form-control" id="no_surat_jalan" name="no_surat_jalan" required>
+                                </div>
+                                <div class="mb-3 form-group">
+                                    <label for="customer" class="form-label">Customer</label>
+                                    <input type="text" class="form-control" id="customer" name="customer" required>
+                                </div>
+                                <div class="mb-3 form-group">
+                                    <label for="tanggal_surat" class="form-label">Tanggal Surat</label>
+                                    <input type="date" class="form-control" id="tanggal_surat" name="tanggal_surat" required>
+                                </div>
+                                <div class="mb-3 form-group d-flex justify-content-end">
+                                    <button type="submit" class="btn btn-primary">Simpan</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 my-4">
+                            <p class="mb-2">Unggah file surat</p>
+                            <form action="" class="dropzone" id="unggah-surat" method="POST" enctype="multipart/form-data">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 @endsection
@@ -149,6 +197,91 @@
                         });
                     }
                 })
+            });
+        });
+
+        document.querySelectorAll('#edit').forEach(button => {
+            button.addEventListener('click', function() {
+                this.value = this.getAttribute('value');
+                const kodeSurat = this.value;
+                $('#kodeSurat').text(kodeSurat);
+                $.ajax({
+                    url: "{{ url('admin/get-surat') }}",
+                    type: "POST",
+                    data: {
+                        kode_surat: kodeSurat,
+                        _token: "{{ csrf_token() }}"
+                    },
+                    success: function(response) {
+                        if (response.status == 'success') {
+                            $('#no_surat_jalan').val(response.data.no_surat_jalan);
+                            $('#customer').val(response.data.customer);
+                            $('#tanggal_surat').val(response.data.tanggal_surat);
+                        } else {
+                            Swal.fire(
+                                'Error!',
+                                'Gagal mendapatkan data arsip.',
+                                'error'
+                            );
+                        }
+                    },
+                    error: function() {
+                        Swal.fire(
+                            'Error!',
+                            'Terjadi kesalahan saat mendapatkan data arsip.',
+                            'error'
+                        );
+                    }
+                });
+            });
+        });
+
+        document.getElementById('edit-surat').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            formData.append('kode_surat', document.getElementById('kodeSurat').textContent);
+            Swal.fire({
+                title: 'Sedang memperbarui data arsip...',
+                allowOutsideClick: false,
+                willOpen: () => {
+                    Swal.showLoading() // Show loading animation
+                },
+                didOpen: () => {
+                    $.ajax({
+                        url: "{{ url('admin/update-arsip') }}",
+                        type: "POST",
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function(response) {
+                            if (response.status == 'success') {
+                                Swal.fire(
+                                    'Updated!',
+                                    'Data arsip telah diperbarui.',
+                                    'success'
+                                ).then(() => {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire(
+                                    'Error!',
+                                    'Gagal memperbarui data arsip.',
+                                    'error'
+                                );
+                            }
+                        },
+                        error: function() {
+                            Swal.fire(
+                                'Error!',
+                                'Terjadi kesalahan saat memperbarui data arsip.',
+                                'error'
+                            );
+                        }
+                    });
+                },
+                didClose: () => {
+                    Swal.hideLoading() // Hide loading animation
+                }
             });
         });
     </script>
