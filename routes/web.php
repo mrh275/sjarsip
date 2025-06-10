@@ -11,3 +11,4 @@ Route::get('/admin/data-arsip', [ArsipController::class, 'dataArsip']);
 Route::get('/admin/laporan', [ArsipController::class, 'laporan']);
 
 Route::post('/login', [LoginController::class, 'login']);
+Route::get('/logout', [LoginController::class, 'logout']);
