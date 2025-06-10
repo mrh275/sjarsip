@@ -98,6 +98,62 @@ class ArsipController extends Controller
             ->with('error', 'Failed to delete arsip. Please try again.');
     }
 
+    public function getSurat(Request $request)
+    {
+        if (!session()->has('username')) {
+            return redirect()->to('/')->with('error', 'You must be logged in to access this page.');
+        }
+
+        $kode_surat = $request->input('kode_surat');
+        $arsip = Arsip::where('kode_surat', $kode_surat)->first();
+
+        if ($arsip) {
+            return response()->json([
+                'status' => 'success',
+                'data' => $arsip,
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Arsip not found.',
+            ]);
+        }
+    }
+
+    public function updateArsip(Request $request)
+    {
+        if (!session()->has('username')) {
+            return redirect()->to('/')->with('error', 'You must be logged in to access this page.');
+        }
+
+        $kode_surat = $request->input('kode_surat');
+        $arsip = Arsip::where('kode_surat', $kode_surat)->first();
+
+        if (!$arsip) {
+            return redirect()->to('/admin/data-arsip')
+                ->with('error', 'Arsip not found.');
+        }
+
+        // Validate and update the arsip data
+        $credentials = $request->validate([
+            'no_surat_jalan' => 'required',
+            'customer' => 'required',
+            'tanggal_surat' => 'required|date',
+        ]);
+
+        if ($arsip->update($credentials)) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Arsip updated successfully.',
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to update arsip. Please try again.',
+            ]);
+        }
+    }
+
     public function laporan()
     {
         if (!session()->has('username')) {
