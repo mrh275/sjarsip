@@ -24,16 +24,16 @@
                                                     <form action="{{ url('admin/tambah-surat') }}" method="POST" id="tambah-surat">
                                                         @csrf
                                                         <div class="mb-3 form-group">
-                                                            <label for="no_surat" class="form-label">Nomor Surat</label>
-                                                            <input type="text" class="form-control" id="no_surat" name="no_surat" required>
+                                                            <label for="no_surat_jalan" class="form-label">Nomor Surat</label>
+                                                            <input type="text" class="form-control" id="no_surat_jalan" name="no_surat_jalan" required>
                                                         </div>
                                                         <div class="mb-3 form-group">
-                                                            <label for="no_surat" class="form-label">Customer</label>
-                                                            <input type="text" class="form-control" id="no_surat" name="no_surat" required>
+                                                            <label for="customer" class="form-label">Customer</label>
+                                                            <input type="text" class="form-control" id="customer" name="customer" required>
                                                         </div>
                                                         <div class="mb-3 form-group">
-                                                            <label for="no_surat" class="form-label">Tanggal Surat</label>
-                                                            <input type="date" class="form-control" id="no_surat" name="no_surat" required>
+                                                            <label for="tanggal_surat" class="form-label">Tanggal Surat</label>
+                                                            <input type="date" class="form-control" id="tanggal_surat" name="tanggal_surat" required>
                                                         </div>
                                                         <div class="mb-3 form-group d-flex justify-content-end">
                                                             <button type="submit" class="btn btn-primary">Simpan</button>
