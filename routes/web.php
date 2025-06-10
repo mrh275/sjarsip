@@ -14,3 +14,5 @@ Route::post('/login', [LoginController::class, 'login']);
 Route::get('/logout', [LoginController::class, 'logout']);
 Route::post('/admin/tambah-surat', [ArsipController::class, 'storeArsip']);
 Route::post('/admin/hapus-arsip', [ArsipController::class, 'hapusArsip']);
+Route::post('/admin/get-surat', [ArsipController::class, 'getSurat']);
+Route::post('/admin/update-arsip', [ArsipController::class, 'updateArsip']);
