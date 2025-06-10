@@ -38,7 +38,7 @@
                         <li>
                             <hr class="dropdown-divider">
                         </li>
-                        <li><a class="dropdown-item" href="{{ url('') }}"><i class="icon-mid bi bi-box-arrow-left me-2"></i> Logout</a></li>
+                        <li><a class="dropdown-item" href="{{ url('logout') }}"><i class="icon-mid bi bi-box-arrow-left me-2"></i> Logout</a></li>
                     </ul>
                 </div>
             </div>
