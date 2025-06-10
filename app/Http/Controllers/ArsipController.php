@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Arsip;
 use Illuminate\Http\Request;
 
 class ArsipController extends Controller
@@ -34,6 +35,31 @@ class ArsipController extends Controller
         return view('admin.tambah-arsip', $data);
     }
 
+    public function storeArsip(Request $request)
+    {
+        if (!session()->has('username')) {
+            return redirect()->to('/')->with('error', 'You must be logged in to access this page.');
+        }
+
+        // Validate and store the arsip data
+        $credentials = $request->validate([
+            'no_surat_jalan' => 'required',
+            'customer' => 'required',
+            'tanggal_surat' => 'required|date',
+        ]);
+
+        $credentials['kode_surat'] = '#' . random_int(10000, 99999); // Example of generating a unique code
+        // dd($credentials);
+        // Assuming you have an Arsip model
+        if (Arsip::create($credentials)) {
+            return redirect()->to('/admin/data-arsip')->with('success', 'Arsip added successfully.');
+        };
+
+        return redirect()->to('/admin/tambah-arsip')
+            ->with('error', 'Failed to add arsip. Please try again.')
+            ->withInput();
+    }
+
     public function dataArsip()
     {
         if (!session()->has('username')) {
@@ -43,6 +69,7 @@ class ArsipController extends Controller
         $data = [
             'title' => 'Data Arsip',
             'sidebar' => 'data-arsip',
+            'arsips' => Arsip::all(), // Fetch arsips with pagination
         ];
 
         return view('admin.data-arsip', $data);
