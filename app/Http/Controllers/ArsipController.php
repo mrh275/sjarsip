@@ -8,6 +8,9 @@ class ArsipController extends Controller
 {
     public function index()
     {
+        if (!session()->has('username')) {
+            return redirect()->to('/')->with('error', 'You must be logged in to access this page.');
+        }
 
         $data = [
             'title' => 'Dashboard',
@@ -19,6 +22,10 @@ class ArsipController extends Controller
 
     public function tambahArsip()
     {
+        if (!session()->has('username')) {
+            return redirect()->to('/')->with('error', 'You must be logged in to access this page.');
+        }
+
         $data = [
             'title' => 'Tambah Arsip',
             'sidebar' => 'tambah-arsip',
@@ -29,6 +36,10 @@ class ArsipController extends Controller
 
     public function dataArsip()
     {
+        if (!session()->has('username')) {
+            return redirect()->to('/')->with('error', 'You must be logged in to access this page.');
+        }
+
         $data = [
             'title' => 'Data Arsip',
             'sidebar' => 'data-arsip',
@@ -39,6 +50,10 @@ class ArsipController extends Controller
 
     public function laporan()
     {
+        if (!session()->has('username')) {
+            return redirect()->to('/')->with('error', 'You must be logged in to access this page.');
+        }
+
         $data = [
             'title' => 'Laporan',
             'sidebar' => 'laporan',
