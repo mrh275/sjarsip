@@ -75,6 +75,29 @@ class ArsipController extends Controller
         return view('admin.data-arsip', $data);
     }
 
+    public function hapusArsip(Request $request)
+    {
+        if (!session()->has('username')) {
+            return redirect()->to('/')->with('error', 'You must be logged in to access this page.');
+        }
+        $kode_surat = $request->input('kode_surat');
+
+        if (Arsip::where('kode_surat', $kode_surat)->delete()) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Arsip deleted successfully.',
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to delete arsip. Please try again.',
+            ]);
+        }
+
+        return redirect()->to('/admin/data-arsip')
+            ->with('error', 'Failed to delete arsip. Please try again.');
+    }
+
     public function laporan()
     {
         if (!session()->has('username')) {
