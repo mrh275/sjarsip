@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Arsip;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -22,5 +23,7 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password'), // Use bcrypt for hashing
             'role' => 2, // Assuming 1 is the role for admin
         ]);
+
+        Arsip::factory(100)->create();
     }
 }
