@@ -51,6 +51,7 @@
                                                 <th>Nomor Surat</th>
                                                 <th>Customer</th>
                                                 <th>Bulan Surat</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -60,6 +61,14 @@
                                                     <td>{{ $arsip->no_surat_jalan }}</td>
                                                     <td>{{ $arsip->customer }}</td>
                                                     <td>{{ date('d-m-Y', strtotime($arsip->tanggal_surat)) }}</td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-warning" id="edit">
+                                                            <i class="fa fa-edit"></i>
+                                                        </button>
+                                                        <button type="button" class="btn btn-danger" id="delete" value="{{ $arsip->kode_surat }}">
+                                                            <i class="fa fa-trash"></i>
+                                                        </button>
+                                                    </td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
@@ -88,4 +97,59 @@
     <script src="{{ asset('assets/extensions/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/extensions/datatables.net-bs5/js/dataTables.bootstrap5.min.js') }}"></script>
     <script src="{{ asset('assets/static/js/pages/datatables.js') }}"></script>
+    <script src="{{ asset('assets/extensions/sweetalert2/sweetalert2.min.js') }}"></script>
+    <script src="{{ asset('assets/static/js/pages/sweetalert2.js') }}"></script>
+    <script>
+        document.querySelectorAll('#delete').forEach(button => {
+            button.addEventListener('click', function() {
+                this.value = this.getAttribute('value');
+                const kodeSurat = this.value;
+                Swal.fire({
+                    title: 'Hapus Arsip No. ' + kodeSurat + '?',
+                    text: "Apakah Anda yakin ingin menghapus data ini?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Ya, Hapus!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Logic to delete the data
+                        $.ajax({
+                            url: "{{ url('admin/hapus-arsip') }}",
+                            type: "POST",
+                            data: {
+                                kode_surat: kodeSurat,
+                                _token: "{{ csrf_token() }}"
+                            },
+                            success: function(response) {
+                                if (response.status == 'success') {
+                                    Swal.fire(
+                                        'Deleted!',
+                                        'Data arsip telah dihapus.',
+                                        'success'
+                                    ).then(() => {
+                                        location.reload();
+                                    });
+                                } else {
+                                    Swal.fire(
+                                        'Error!',
+                                        'Gagal menghapus data arsip.',
+                                        'error'
+                                    );
+                                }
+                            },
+                            error: function() {
+                                Swal.fire(
+                                    'Error!',
+                                    'Terjadi kesalahan saat menghapus data arsip.',
+                                    'error'
+                                );
+                            }
+                        });
+                    }
+                })
+            });
+        });
+    </script>
 @endpush
