@@ -15,12 +15,18 @@
     @endif
     @if ($sidebar == 'tambah-arsip')
         <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
+        <link rel="stylesheet" href="{{ asset('assets/extensions/filepond/filepond.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/extensions/filepond-plugin-image-preview/filepond-plugin-image-preview.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/extensions/toastify-js/src/toastify.css') }}">
     @endif
     @if ($sidebar == 'data-arsip')
         <link rel="stylesheet" href="{{ asset('assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css') }}">
         <link rel="stylesheet" crossorigin href="{{ asset('assets/compiled/css/table-datatable-jquery.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/extensions/sweetalert2/sweetalert2.min.css') }}">
         <link rel="stylesheet" crossorigin href="{{ asset('assets/compiled/css/extra-component-sweetalert.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/extensions/filepond/filepond.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/extensions/filepond-plugin-image-preview/filepond-plugin-image-preview.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/extensions/toastify-js/src/toastify.css') }}">
     @endif
 
 </head>
