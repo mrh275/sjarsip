@@ -62,6 +62,9 @@
                                                     <td>{{ $arsip->customer }}</td>
                                                     <td>{{ date('d-m-Y', strtotime($arsip->tanggal_surat)) }}</td>
                                                     <td>
+                                                        <button type="button" class="btn btn-secondary" id="show" data-bs-toggle="modal" data-bs-target="#showModal" value="{{ $arsip->kode_surat }}">
+                                                            <i class="fa fa-eye"></i>
+                                                        </button>
                                                         <button type="button" class="btn btn-warning" id="edit" data-bs-toggle="modal" data-bs-target="#editModal" value="{{ $arsip->kode_surat }}">
                                                             <i class="fa fa-edit"></i>
                                                         </button>
@@ -130,8 +133,33 @@
                     <div class="row">
                         <div class="col-12 my-4">
                             <p class="mb-2">Unggah file surat</p>
-                            <form action="" class="dropzone" id="unggah-surat" method="POST" enctype="multipart/form-data">
+                            <form action="" id="unggah-surat" method="POST" enctype="multipart/form-data">
+                                <input type="file" class="image-preview-filepond">
                             </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Show Image Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">Lampiran Arsip
+                    </h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <i data-feather="x"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <span class="badge bg-primary">Kode Surat: <span id="kodeSurat"></span></span>
+                    <div class="row my-3">
+                        <h6>Masukan rincian data surat yang akan diubah</h6>
+                        <div class="col-12" id="show-content">
+
                         </div>
                     </div>
                 </div>
@@ -147,6 +175,16 @@
     <script src="{{ asset('assets/static/js/pages/datatables.js') }}"></script>
     <script src="{{ asset('assets/extensions/sweetalert2/sweetalert2.min.js') }}"></script>
     <script src="{{ asset('assets/static/js/pages/sweetalert2.js') }}"></script>
+    <script src="{{ asset('assets') }}/extensions/filepond-plugin-file-validate-size/filepond-plugin-file-validate-size.min.js"></script>
+    <script src="{{ asset('assets') }}/extensions/filepond-plugin-file-validate-type/filepond-plugin-file-validate-type.min.js"></script>
+    <script src="{{ asset('assets') }}/extensions/filepond-plugin-image-crop/filepond-plugin-image-crop.min.js"></script>
+    <script src="{{ asset('assets') }}/extensions/filepond-plugin-image-exif-orientation/filepond-plugin-image-exif-orientation.min.js"></script>
+    <script src="{{ asset('assets') }}/extensions/filepond-plugin-image-filter/filepond-plugin-image-filter.min.js"></script>
+    <script src="{{ asset('assets') }}/extensions/filepond-plugin-image-preview/filepond-plugin-image-preview.min.js"></script>
+    <script src="{{ asset('assets') }}/extensions/filepond-plugin-image-resize/filepond-plugin-image-resize.min.js"></script>
+    <script src="{{ asset('assets') }}/extensions/filepond/filepond.js"></script>
+    <script src="{{ asset('assets') }}/extensions/toastify-js/src/toastify.js"></script>
+    <script src="{{ asset('assets') }}/static/js/pages/filepond.js"></script>
     <script>
         document.querySelectorAll('#delete').forEach(button => {
             button.addEventListener('click', function() {
@@ -281,6 +319,38 @@
                 },
                 didClose: () => {
                     Swal.hideLoading() // Hide loading animation
+                }
+            });
+        });
+
+        document.getElementById('show').addEventListener('click', function() {
+            this.value = this.getAttribute('value');
+            const kodeSurat = this.value;
+            $('#kodeSurat').text(kodeSurat);
+            $.ajax({
+                url: "{{ url('admin/get-surat') }}",
+                type: "POST",
+                data: {
+                    kode_surat: kodeSurat,
+                    _token: "{{ csrf_token() }}"
+                },
+                success: function(response) {
+                    if (response.status == 'success') {
+                        $('#show-content').html('<img src="' + response.file_url + '" class="img-fluid" alt="Lampiran Surat">');
+                    } else {
+                        Swal.fire(
+                            'Error!',
+                            'Gagal mendapatkan data arsip.',
+                            'error'
+                        );
+                    }
+                },
+                error: function() {
+                    Swal.fire(
+                        'Error!',
+                        'Terjadi kesalahan saat mendapatkan data arsip.',
+                        'error'
+                    );
                 }
             });
         });
