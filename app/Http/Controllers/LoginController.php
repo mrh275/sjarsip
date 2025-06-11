@@ -32,7 +32,9 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             // Authentication passed...
-            Session::put('username', $request->input('username'));
+            $result = Auth::user();
+            Session::put('username', $result->username);
+            Session::put('name', $result->name);
             return redirect()->to('/admin/dashboard')->with('success', 'Login successful');
         } else {
             return redirect()->back()->withErrors(['login' => 'Invalid credentials'])->withInput();
