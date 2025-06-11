@@ -49,8 +49,10 @@ class ArsipController extends Controller
         ]);
 
         $credentials['kode_surat'] = '#' . random_int(10000, 99999); // Example of generating a unique code
+        $credentials['file_surat'] = $request->file('unggah_surat');
         // dd($credentials);
         // Assuming you have an Arsip model
+        dd($credentials);
         if (Arsip::create($credentials)) {
             return redirect()->to('/admin/data-arsip')->with('success', 'Arsip added successfully.');
         };
