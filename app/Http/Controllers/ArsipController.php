@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Arsip;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ArsipController extends Controller
 {
@@ -46,13 +47,15 @@ class ArsipController extends Controller
             'no_surat_jalan' => 'required',
             'customer' => 'required',
             'tanggal_surat' => 'required|date',
+            'unggah_surat' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048', // Validate file type and size
         ]);
 
-        $credentials['kode_surat'] = '#' . random_int(10000, 99999); // Example of generating a unique code
-        $credentials['file_surat'] = $request->file('unggah_surat');
-        // dd($credentials);
-        // Assuming you have an Arsip model
-        dd($credentials);
+        $credentials['kode_surat'] = '#' . random_int(10000, 99999);
+
+        $fileSurat = $request->file('unggah_surat');
+        $newFileName = $credentials['kode_surat'] . '.' . $fileSurat->extension();
+        $fileSurat->move(storage_path('arsip/surat'), $newFileName);
+
         if (Arsip::create($credentials)) {
             return redirect()->to('/admin/data-arsip')->with('success', 'Arsip added successfully.');
         };
@@ -71,7 +74,7 @@ class ArsipController extends Controller
         $data = [
             'title' => 'Data Arsip',
             'sidebar' => 'data-arsip',
-            'arsips' => Arsip::all(), // Fetch arsips with pagination
+            'arsips' => Arsip::all(),
         ];
 
         return view('admin.data-arsip', $data);
@@ -113,6 +116,7 @@ class ArsipController extends Controller
             return response()->json([
                 'status' => 'success',
                 'data' => $arsip,
+                'file_url' => Storage::url('arsip/surat/' . $kode_surat . '.jpg'), // Assuming the file is stored as PDF
             ]);
         } else {
             return response()->json([
