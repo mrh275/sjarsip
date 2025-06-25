@@ -9,6 +9,18 @@
             <div id="main-content">
                 <div class="page-heading">
                     <h3>Data Arsip</h3>
+                    @if (session()->has('success'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ session('success') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+                    @if (session()->has('error'))
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            {{ session('error') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
                 </div>
                 <div class="page-content">
                     <section class="section">
@@ -57,12 +69,12 @@
                                         <tbody>
                                             @foreach ($arsips as $arsip)
                                                 <tr>
-                                                    <td>{{ $arsip->kode_surat }}</td>
+                                                    <td id="kode-surat">{{ $arsip->kode_surat }}</td>
                                                     <td>{{ $arsip->no_surat_jalan }}</td>
                                                     <td>{{ $arsip->customer }}</td>
                                                     <td>{{ date('d-m-Y', strtotime($arsip->tanggal_surat)) }}</td>
                                                     <td>
-                                                        <button type="button" class="btn btn-secondary" id="show" data-bs-toggle="modal" data-bs-target="#showModal" value="{{ $arsip->kode_surat }}">
+                                                        <button type="button" class="btn btn-secondary" id="show" value="{{ url('arsip/surat') . '/' . $arsip->no_surat_jalan . '.png' }}">
                                                             <i class="fa fa-eye"></i>
                                                         </button>
                                                         <button type="button" class="btn btn-warning" id="edit" data-bs-toggle="modal" data-bs-target="#editModal" value="{{ $arsip->kode_surat }}">
@@ -105,13 +117,14 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <span class="badge bg-primary">Kode Surat: <span id="kodeSurat"></span></span>
+                    <span class="badge bg-primary">Kode Surat: <span id="editKodeSurat"></span></span>
                     <div class="row my-3">
                         <h6>Masukan rincian data surat yang akan diubah</h6>
 
                         <div class="col-12 my-4">
-                            <form action="{{ url('admin/update-arsip') }}" method="POST" id="edit-surat">
+                            <form action="{{ url('admin/update-arsip') }}" method="POST" id="edit-surat" enctype="multipart/form-data">
                                 @csrf
+                                <input type="hidden" name="kode_surat" id="kodeSurat" value="">
                                 <div class="mb-3 form-group">
                                     <label for="no_surat_jalan" class="form-label">Nomor Surat</label>
                                     <input type="text" class="form-control" id="no_surat_jalan" name="no_surat_jalan" required>
@@ -124,17 +137,13 @@
                                     <label for="tanggal_surat" class="form-label">Tanggal Surat</label>
                                     <input type="date" class="form-control" id="tanggal_surat" name="tanggal_surat" required>
                                 </div>
+                                <div class="mb-3 form-group">
+                                    <p class="mb-2">Unggah file surat</p>
+                                    <input type="file" name="unggah_surat" class="image-preview-filepond">
+                                </div>
                                 <div class="mb-3 form-group d-flex justify-content-end">
                                     <button type="submit" class="btn btn-primary">Simpan</button>
                                 </div>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12 my-4">
-                            <p class="mb-2">Unggah file surat</p>
-                            <form action="" id="unggah-surat" method="POST" enctype="multipart/form-data">
-                                <input type="file" class="image-preview-filepond">
                             </form>
                         </div>
                     </div>
@@ -144,7 +153,7 @@
     </div>
 
     <!-- Show Image Modal -->
-    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal fade" id="showModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -155,9 +164,9 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <span class="badge bg-primary">Kode Surat: <span id="kodeSurat"></span></span>
+                    <span class="badge bg-primary">Kode Surat: <span id="lampiranKodeSurat"></span></span>
                     <div class="row my-3">
-                        <h6>Masukan rincian data surat yang akan diubah</h6>
+                        <h6>Lampiran</h6>
                         <div class="col-12" id="show-content">
 
                         </div>
@@ -186,172 +195,302 @@
     <script src="{{ asset('assets') }}/extensions/toastify-js/src/toastify.js"></script>
     <script src="{{ asset('assets') }}/static/js/pages/filepond.js"></script>
     <script>
-        document.querySelectorAll('#delete').forEach(button => {
-            button.addEventListener('click', function() {
-                this.value = this.getAttribute('value');
-                const kodeSurat = this.value;
-                Swal.fire({
-                    title: 'Hapus Arsip No. ' + kodeSurat + '?',
-                    text: "Apakah Anda yakin ingin menghapus data ini?",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#3085d6',
-                    confirmButtonText: 'Ya, Hapus!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Logic to delete the data
-                        $.ajax({
-                            url: "{{ url('admin/hapus-arsip') }}",
-                            type: "POST",
-                            data: {
-                                kode_surat: kodeSurat,
-                                _token: "{{ csrf_token() }}"
-                            },
-                            success: function(response) {
-                                if (response.status == 'success') {
-                                    Swal.fire(
-                                        'Deleted!',
-                                        'Data arsip telah dihapus.',
-                                        'success'
-                                    ).then(() => {
-                                        location.reload();
-                                    });
-                                } else {
+        // document.getElementById('edit-surat').addEventListener('submit', function(e) {
+        //     e.preventDefault();
+        //     const formData = new FormData(this);
+        //     formData.append('kode_surat', document.getElementById('kodeSurat').textContent);
+        //     Swal.fire({
+        //         title: 'Sedang memperbarui data arsip...',
+        //         allowOutsideClick: false,
+        //         willOpen: () => {
+        //             Swal.showLoading() // Show loading animation
+        //         },
+        //         didOpen: () => {
+        //             $.ajax({
+        //                 url: "{{ url('admin/update-arsip') }}",
+        //                 type: "POST",
+        //                 data: formData,
+        //                 contentType: false,
+        //                 processData: false,
+        //                 success: function(response) {
+        //                     if (response.status == 'success') {
+        //                         Swal.fire(
+        //                             'Updated!',
+        //                             'Data arsip telah diperbarui.',
+        //                             'success'
+        //                         ).then(() => {
+        //                             location.reload();
+        //                         });
+        //                     } else {
+        //                         Swal.fire(
+        //                             'Error!',
+        //                             'Gagal memperbarui data arsip.',
+        //                             'error'
+        //                         );
+        //                     }
+        //                 },
+        //                 error: function() {
+        //                     Swal.fire(
+        //                         'Error!',
+        //                         'Terjadi kesalahan saat memperbarui data arsip.',
+        //                         'error'
+        //                     );
+        //                 }
+        //             });
+        //         },
+        //         didClose: () => {
+        //             Swal.hideLoading() // Hide loading animation
+        //         }
+        //     });
+        // });
+
+        // Pastikan skrip ini dijalankan setelah DOM sepenuhnya dimuat dan jQuery tersedia.
+        // Menempatkannya di dalam $(document).ready() adalah praktik yang baik jika menggunakan jQuery.
+        $(document).ready(function() {
+
+            // Event listener untuk menangani klik pada tombol yg ada di halaman ini.
+            document.addEventListener('click', function(event) {
+
+                // Event untuk menampilkan modal dengan gambar lampiran surat.
+                const clickedButton = event.target.closest('#show'); // Mengubah dari class menjadi ID
+
+                if (clickedButton) {
+
+                    // Mengambil nilai 'value' dari tombol, yang berisi URL gambar lampiran.
+                    const imageUrl = clickedButton.getAttribute('value');
+
+                    // Mengisi konten modal dengan gambar menggunakan jQuery.
+                    // Pastikan elemen dengan ID 'show-content' ada di modal kamu.
+                    if ($('#show-content').length) {
+                        $('#show-content').html('<img src="' + imageUrl + '" class="img-fluid" alt="Lampiran Surat">');
+                        // 1. Dapatkan elemen <tr> terdekat (parent dari tombol yang diklik)
+                        const row = clickedButton.closest('tr');
+                        // 2. Dari elemen <tr>, cari <td> dengan ID 'kode-surat'
+                        // Penting: Pastikan ID 'kode-surat' ini unik per baris. Jika tidak, pakai class.
+                        const kodeSurat = row.querySelector('#kode-surat');
+                        const labelKodeSurat = document.querySelector('span#lampiranKodeSurat');
+                        labelKodeSurat.textContent = kodeSurat.textContent; // Setel teks pada
+                    } else {
+                        console.error("Elemen dengan ID 'show-content' tidak ditemukan.");
+                    }
+
+                    // Menampilkan modal Bootstrap menggunakan jQuery.
+                    // Pastikan elemen dengan ID 'showModal' adalah modal Bootstrap kamu.
+                    if ($('#showModal').length) {
+                        $('#showModal').modal('show');
+                    } else {}
+
+                } else {
+                    // Ini akan log jika klik terjadi, tetapi bukan pada tombol yang ditargetkan.
+                    // Bisa dihapus setelah debugging.
+                    console.log("Klik bukan pada tombol dengan ID 'show'.");
+                }
+
+                // Event untuk menghapus data arsip.
+                const clickedDeleteButton = event.target.closest('#delete');
+
+                if (clickedDeleteButton) {
+                    console.log("Tombol dengan ID 'delete' ditemukan:", clickedDeleteButton);
+
+                    // Mengambil nilai 'value' dari tombol, yang berisi kode surat yang akan dihapus.
+                    const kodeSurat = clickedDeleteButton.getAttribute('value');
+                    console.log("Kode Surat yang akan dihapus:", kodeSurat);
+
+                    // Menampilkan konfirmasi SweetAlert2 sebelum menghapus.
+                    // Pastikan SweetAlert2 (Swal) sudah dimuat di halaman Anda.
+                    Swal.fire({
+                        title: 'Hapus Arsip No. ' + kodeSurat + '?',
+                        text: "Apakah Anda yakin ingin menghapus data ini?",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Ya, Hapus!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            console.log("Konfirmasi hapus diterima.");
+                            // Logika untuk menghapus data menggunakan AJAX.
+                            $.ajax({
+                                url: "{{ url('admin/hapus-arsip') }}", // Pastikan URL ini sesuai dengan route Anda
+                                type: "POST",
+                                data: {
+                                    kode_surat: kodeSurat,
+                                    // Pastikan CSRF token tersedia. Anda mungkin perlu menyediakannya secara global
+                                    // atau memastikan template Blade Anda merendernya dengan benar.
+                                    _token: "{{ csrf_token() }}"
+                                },
+                                success: function(response) {
+                                    if (response.status == 'success') {
+                                        console.log("Hapus berhasil:", response);
+                                        Swal.fire(
+                                            'Dihapus!',
+                                            'Data arsip telah dihapus.',
+                                            'success'
+                                        ).then(() => {
+                                            // Memuat ulang halaman setelah penghapusan berhasil
+                                            location.reload();
+                                        });
+                                    } else {
+                                        console.error("Hapus gagal. Respon:", response);
+                                        Swal.fire(
+                                            'Error!',
+                                            'Gagal menghapus data arsip.',
+                                            'error'
+                                        );
+                                    }
+                                },
+                                error: function(xhr, status, error) {
+                                    console.error("Terjadi kesalahan AJAX saat menghapus:", error);
                                     Swal.fire(
                                         'Error!',
-                                        'Gagal menghapus data arsip.',
+                                        'Terjadi kesalahan saat menghapus data arsip.',
                                         'error'
                                     );
                                 }
-                            },
-                            error: function() {
-                                Swal.fire(
-                                    'Error!',
-                                    'Terjadi kesalahan saat menghapus data arsip.',
-                                    'error'
-                                );
-                            }
-                        });
-                    }
-                })
-            });
-        });
-
-        document.querySelectorAll('#edit').forEach(button => {
-            button.addEventListener('click', function() {
-                this.value = this.getAttribute('value');
-                const kodeSurat = this.value;
-                $('#kodeSurat').text(kodeSurat);
-                $.ajax({
-                    url: "{{ url('admin/get-surat') }}",
-                    type: "POST",
-                    data: {
-                        kode_surat: kodeSurat,
-                        _token: "{{ csrf_token() }}"
-                    },
-                    success: function(response) {
-                        if (response.status == 'success') {
-                            $('#no_surat_jalan').val(response.data.no_surat_jalan);
-                            $('#customer').val(response.data.customer);
-                            $('#tanggal_surat').val(response.data.tanggal_surat);
+                            });
                         } else {
-                            Swal.fire(
-                                'Error!',
-                                'Gagal mendapatkan data arsip.',
-                                'error'
-                            );
+                            console.log("Konfirmasi hapus dibatalkan.");
                         }
-                    },
-                    error: function() {
-                        Swal.fire(
-                            'Error!',
-                            'Terjadi kesalahan saat mendapatkan data arsip.',
-                            'error'
-                        );
-                    }
-                });
-            });
-        });
+                    });
+                }
 
-        document.getElementById('edit-surat').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const formData = new FormData(this);
-            formData.append('kode_surat', document.getElementById('kodeSurat').textContent);
-            Swal.fire({
-                title: 'Sedang memperbarui data arsip...',
-                allowOutsideClick: false,
-                willOpen: () => {
-                    Swal.showLoading() // Show loading animation
-                },
-                didOpen: () => {
+                const clickedEditButton = event.target.closest('#edit');
+
+                if (clickedEditButton) {
+                    console.log("Tombol dengan ID 'edit' ditemukan:", clickedEditButton);
+
+                    // Mengambil nilai 'value' dari tombol, yang berisi kode surat untuk diedit.
+                    const kodeSurat = clickedEditButton.getAttribute('value');
+                    console.log("Kode Surat yang akan diedit:", kodeSurat);
+
+                    // Menampilkan kode surat di elemen dengan ID 'kodeSurat' (misal: di dalam modal edit).
+                    if ($('#editKodeSurat').length) {
+                        $('#editKodeSurat').text(kodeSurat);
+                        $('input#kodeSurat').val(kodeSurat); // Mengisi input tersembunyi dengan kode surat
+                        console.log("ID kodeSurat diisi.");
+                    } else {
+                        console.warn("Elemen dengan ID 'kodeSurat' tidak ditemukan untuk menampilkan kode surat.");
+                    }
+
+                    // Melakukan permintaan AJAX untuk mendapatkan data arsip.
                     $.ajax({
-                        url: "{{ url('admin/update-arsip') }}",
+                        url: "{{ url('admin/get-surat') }}", // Pastikan URL ini sesuai dengan route Anda
                         type: "POST",
-                        data: formData,
-                        contentType: false,
-                        processData: false,
+                        data: {
+                            kode_surat: kodeSurat,
+                            _token: "{{ csrf_token() }}" // Pastikan CSRF token tersedia
+                        },
                         success: function(response) {
                             if (response.status == 'success') {
-                                Swal.fire(
-                                    'Updated!',
-                                    'Data arsip telah diperbarui.',
-                                    'success'
-                                ).then(() => {
-                                    location.reload();
-                                });
+                                console.log("Data arsip berhasil didapatkan:", response.data);
+                                // Mengisi form input di modal edit dengan data yang diterima.
+                                $('#no_surat_jalan').val(response.data.no_surat_jalan);
+                                $('#customer').val(response.data.customer);
+                                $('#tanggal_surat').val(response.data.tanggal_surat);
+
+                                // Menampilkan modal edit (asumsi ID modal adalah #editModal)
+                                // Pastikan elemen dengan ID 'editModal' adalah modal Bootstrap kamu.
+                                if ($('#editModal').length) {
+                                    $('#editModal').modal('show');
+                                    console.log("Modal 'editModal' ditampilkan.");
+                                } else {
+                                    console.error("Elemen dengan ID 'editModal' tidak ditemukan.");
+                                }
+
                             } else {
+                                console.error("Gagal mendapatkan data arsip. Respon:", response);
                                 Swal.fire(
                                     'Error!',
-                                    'Gagal memperbarui data arsip.',
+                                    'Gagal mendapatkan data arsip.',
                                     'error'
                                 );
                             }
                         },
-                        error: function() {
+                        error: function(xhr, status, error) {
+                            console.error("Terjadi kesalahan AJAX saat mendapatkan data arsip:", error);
                             Swal.fire(
                                 'Error!',
-                                'Terjadi kesalahan saat memperbarui data arsip.',
+                                'Terjadi kesalahan saat mendapatkan data arsip.',
                                 'error'
                             );
                         }
                     });
-                },
-                didClose: () => {
-                    Swal.hideLoading() // Hide loading animation
                 }
-            });
-        });
 
-        document.getElementById('show').addEventListener('click', function() {
-            this.value = this.getAttribute('value');
-            const kodeSurat = this.value;
-            $('#kodeSurat').text(kodeSurat);
-            $.ajax({
-                url: "{{ url('admin/get-surat') }}",
-                type: "POST",
-                data: {
-                    kode_surat: kodeSurat,
-                    _token: "{{ csrf_token() }}"
-                },
-                success: function(response) {
-                    if (response.status == 'success') {
-                        $('#show-content').html('<img src="' + response.file_url + '" class="img-fluid" alt="Lampiran Surat">');
-                    } else {
-                        Swal.fire(
-                            'Error!',
-                            'Gagal mendapatkan data arsip.',
-                            'error'
-                        );
-                    }
-                },
-                error: function() {
-                    Swal.fire(
-                        'Error!',
-                        'Terjadi kesalahan saat mendapatkan data arsip.',
-                        'error'
-                    );
-                }
+                // const editSuratForm = document.getElementById('edit-surat');
+                // if (editSuratForm) {
+                //     editSuratForm.addEventListener('submit', function(e) {
+                //         e.preventDefault(); // Prevents the default form submission.
+                //         console.log("Form 'edit-surat' submitted.");
+
+                //         const formData = new FormData(this);
+
+                //         // Appends 'kode_surat' to the FormData.
+                //         // It's assumed 'kodeSurat' element exists and contains the correct value.
+                //         if (document.getElementById('kodeSurat')) {
+                //             formData.append('kode_surat', document.getElementById('kodeSurat').textContent);
+                //             console.log("kode_surat appended to FormData:", document.getElementById('kodeSurat').textContent);
+                //         } else {
+                //             console.warn("Element with ID 'kodeSurat' not found for form submission.");
+                //         }
+
+                //         Swal.fire({
+                //             title: 'Updating archive data...',
+                //             allowOutsideClick: false,
+                //             willOpen: () => {
+                //                 Swal.showLoading(); // Show loading animation
+                //                 console.log("SweetAlert loading displayed.");
+                //             },
+                //             didOpen: () => {
+                //                 // Perform AJAX request inside didOpen to ensure loading animation is visible.
+                //                 $.ajax({
+                //                     url: "{{ url('admin/update-arsip') }}", // Ensure this URL matches your route
+                //                     type: "POST",
+                //                     headers: {
+                //                         'X-CSRF-TOKEN': "{{ csrf_token() }}" // Ensure CSRF token is included
+                //                     },
+                //                     data: formData,
+                //                     contentType: false, // Required for FormData
+                //                     processData: false, // Required for FormData
+                //                     success: function(response) {
+                //                         if (response.status == 'success') {
+                //                             console.log("Update successful:", response);
+                //                             Swal.fire(
+                //                                 'Updated!',
+                //                                 'Archive data has been updated.',
+                //                                 'success'
+                //                             ).then(() => {
+                //                                 location.reload(); // Reload the page after successful update
+                //                             });
+                //                         } else {
+                //                             console.error("Update failed. Response:", response);
+                //                             Swal.fire(
+                //                                 'Error!',
+                //                                 'Failed to update archive data.',
+                //                                 'error'
+                //                             );
+                //                         }
+                //                     },
+                //                     error: function(xhr, status, error) {
+                //                         console.error("AJAX error occurred during update:", error);
+                //                         Swal.fire(
+                //                             'Error!',
+                //                             'An error occurred while updating archive data.',
+                //                             'error'
+                //                         );
+                //                     }
+                //                 });
+                //             },
+                //             didClose: () => {
+                //                 // Swal.hideLoading() is typically not needed here as Swal.fire closes itself
+                //                 // or is replaced by another Swal.fire call.
+                //                 console.log("SweetAlert loading hidden (if applicable).");
+                //             }
+                //         });
+                //     });
+                // } else {
+                //     console.error("Form with ID 'edit-surat' not found. Submit listener not attached.");
+                // }
             });
         });
     </script>
