@@ -53,8 +53,8 @@ class ArsipController extends Controller
         $credentials['kode_surat'] = '#' . random_int(10000, 99999);
 
         $fileSurat = $request->file('unggah_surat');
-        $newFileName = $credentials['kode_surat'] . '.' . $fileSurat->extension();
-        $fileSurat->move(storage_path('arsip/surat'), $newFileName);
+        $newFileName = $credentials['no_surat_jalan'] . '.' . $fileSurat->extension();
+        $fileSurat->move(public_path('arsip/surat'), $newFileName);
 
         if (Arsip::create($credentials)) {
             return redirect()->to('/admin/data-arsip')->with('success', 'Arsip added successfully.');
@@ -75,6 +75,7 @@ class ArsipController extends Controller
             'title' => 'Data Arsip',
             'sidebar' => 'data-arsip',
             'arsips' => Arsip::all(),
+
         ];
 
         return view('admin.data-arsip', $data);
@@ -116,7 +117,6 @@ class ArsipController extends Controller
             return response()->json([
                 'status' => 'success',
                 'data' => $arsip,
-                'file_url' => Storage::url('arsip/surat/' . $kode_surat . '.jpg'), // Assuming the file is stored as PDF
             ]);
         } else {
             return response()->json([
@@ -131,7 +131,6 @@ class ArsipController extends Controller
         if (!session()->has('username')) {
             return redirect()->to('/')->with('error', 'You must be logged in to access this page.');
         }
-
         $kode_surat = $request->input('kode_surat');
         $arsip = Arsip::where('kode_surat', $kode_surat)->first();
 
@@ -147,16 +146,18 @@ class ArsipController extends Controller
             'tanggal_surat' => 'required|date',
         ]);
 
+        if ($request->file('unggah_surat')) {
+            $fileSurat = $request->file('unggah_surat');
+            $newFileName = $credentials['no_surat_jalan'] . '.' . $fileSurat->extension();
+            $fileSurat->move(public_path('arsip/surat'), $newFileName);
+        }
+
         if ($arsip->update($credentials)) {
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Arsip updated successfully.',
-            ]);
+            return redirect()->to('/admin/data-arsip')->with('success', 'Arsip berhasil diperbaharui.');
         } else {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Failed to update arsip. Please try again.',
-            ]);
+            return redirect()->to('/admin/data-arsip')
+                ->with('error', 'Arsip gagal di perbaharui.')
+                ->withInput();
         }
     }
 
