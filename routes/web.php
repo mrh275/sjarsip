@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ArsipController;
+use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
 
@@ -16,3 +17,4 @@ Route::post('/admin/tambah-surat', [ArsipController::class, 'storeArsip']);
 Route::post('/admin/hapus-arsip', [ArsipController::class, 'hapusArsip']);
 Route::post('/admin/get-surat', [ArsipController::class, 'getSurat']);
 Route::post('/admin/update-arsip', [ArsipController::class, 'updateArsip']);
+Route::post('admin/cetak-laporan', [LaporanController::class, 'cetakLaporan']);
