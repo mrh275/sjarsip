@@ -30,16 +30,25 @@
                                         </select>
                                     </div>
                                     <div class="form-group my-3">
-                                        <label for="source">Sumber</label>
-                                        <select name="source" id="source" class="form-select">
+                                        <label for="tahun">Tahun</label>
+                                        <select name="tahun" id="tahun" class="form-select">
+                                            <option value="">Pilih :</option>
+                                            <option value="2025">2025</option>
+                                            <option value="2024">2024</option>
+                                            <option value="2023">2023</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group my-3">
+                                        <label for="periode">Sumber</label>
+                                        <select name="periode" id="periode" class="form-select">
                                             <option value="">Pilih :</option>
                                             <option value="1">All</option>
                                             <option value="2">Per-Bulan</option>
                                         </select>
                                     </div>
                                     <div class="form-group d-none my-3" id="month-wrapper">
-                                        <label for="month">Bulan</label>
-                                        <select name="month" id="month" class="form-select">
+                                        <label for="bulan">Bulan</label>
+                                        <select name="bulan" id="bulan" class="form-select">
                                             <option value="">Pilih :</option>
                                             <option value="01">Januari</option>
                                             <option value="02">Februari</option>
@@ -79,8 +88,8 @@
 
 @push('scripts')
     <script>
-        let source = document.getElementById('source');
-        source.addEventListener('change', function() {
+        let periode = document.getElementById('periode');
+        periode.addEventListener('change', function() {
             let month = document.getElementById('month-wrapper');
             if (this.value == '2') {
                 month.classList.remove('d-none');
