@@ -5,12 +5,13 @@
         <div class="row h-100">
             <div class="col-lg-5 col-12">
                 <div id="auth-left">
-                    <div class="auth-logo">
-                        <a href="{{ url('') }}" class="fs-1 fw-bold">
-                            SJ Arsip
+                    <div class="auth-logo" style="margin-bottom: 2rem !important;">
+                        <a href="{{ url('') }}" class="fs-4 fw-bold">
+                            <img src="{{ url('assets/img/logo-adyawinsa-bg.png') }}" style="width: 20rem !important; height:auto;" alt=""><br>
+                            <span>PT. Summit Adyawinsa Indonesia</span>
                         </a>
                     </div>
-                    <h1 class="auth-title">Log in.</h1>
+                    <h1 class="auth-title" style="font-size: 2rem">Log in.</h1>
                     <p class="auth-subtitle mb-5">Silahkan login terlebih dahulu.</p>
 
                     <form action="{{ url('login') }}" method="POST">
