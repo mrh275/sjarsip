@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Arsip;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Exports\LaporanExportExcel;
+use Maatwebsite\Excel\Facades\Excel;
 
 class LaporanController extends Controller
 {
@@ -28,11 +30,19 @@ class LaporanController extends Controller
                 ->whereMonth('tanggal_surat', $bulan)->get();
         }
         // dd($arsip);
-        $pdf = Pdf::loadView('admin.export-pdf', ['arsip' => $arsip, 'tahun' => $tahun, 'bulan' => $bulan]);
+        if ($format == 'excel') {
+            // 1. Export to Excel
+            // Assuming you have an export class for Excel
+            $filename = 'laporan-arsip-' . $tahun . '-' . str_pad($bulan, 2, '0', STR_PAD_LEFT) . '.xlsx';
 
-        // 4. Download PDF
-        // Nama file PDF akan menjadi "arsip-2023-10.pdf" misalnya.
-        $namaFile = 'arsip-' . $tahun . '-' . str_pad($bulan, 2, '0', STR_PAD_LEFT) . '.pdf';
-        return $pdf->download($namaFile);
+            return Excel::download(new LaporanExportExcel($periode, $tahun, $bulan), $filename);
+        } else {
+            $pdf = Pdf::loadView('admin.export-pdf', ['arsip' => $arsip, 'tahun' => $tahun, 'bulan' => $bulan]);
+
+            // 4. Download PDF
+            // Nama file PDF akan menjadi "arsip-2023-10.pdf" misalnya.
+            $namaFile = 'arsip-' . $tahun . '-' . str_pad($bulan, 2, '0', STR_PAD_LEFT) . '.pdf';
+            return $pdf->download($namaFile);
+        }
     }
 }
