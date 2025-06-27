@@ -25,8 +25,8 @@
                                         <label for="format">Format</label>
                                         <select name="format" id="format" class="form-select">
                                             <option value="">Pilih :</option>
-                                            <option value="1">PDF</option>
-                                            <option value="2">Excel</option>
+                                            <option value="pdf">PDF</option>
+                                            <option value="excel">Excel</option>
                                         </select>
                                     </div>
                                     <div class="form-group my-3">
