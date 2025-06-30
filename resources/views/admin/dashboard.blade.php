@@ -25,7 +25,7 @@
                                                 </div>
                                                 <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
                                                     <h6 class="text-muted font-semibold">Arsip Surat</h6>
-                                                    <h6 class="font-extrabold mb-0">128</h6>
+                                                    <h6 class="font-extrabold mb-0">{{ $total_arsip }}</h6>
                                                 </div>
                                             </div>
                                         </div>
@@ -59,7 +59,7 @@
                                                 </div>
                                                 <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
                                                     <h6 class="text-muted font-semibold">User</h6>
-                                                    <h6 class="font-extrabold mb-0">80.000</h6>
+                                                    <h6 class="font-extrabold mb-0">{{ $users }}</h6>
                                                 </div>
                                             </div>
                                         </div>
@@ -70,7 +70,7 @@
                                 <div class="col-12">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h4>Profile Visit</h4>
+                                            <h4>Grafik Data Arsip</h4>
                                         </div>
                                         <div class="card-body">
                                             <div id="chart-profile-visit"></div>
@@ -93,3 +93,83 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        // Ambil data 'arsips' dari PHP yang dikirim ke view
+        const arsips = @json($arsips);
+
+        // --- LOGIKA PEMROSESAN DATA PHP DI DALAM BLADE ---
+        // Inisialisasi array untuk menyimpan hitungan per bulan
+        let monthlyCounts = new Array(12).fill(0); // Indeks 0-11 untuk Jan-Des
+
+        arsips.forEach(arsip => {
+            // Asumsi tanggal_surat adalah string dalam format yang bisa diparse, contoh: "YYYY-MM-DD"
+            // Buat objek Date dari tanggal_surat
+            const date = new Date(arsip.tanggal_surat);
+            const month = date.getMonth(); // getMonth() mengembalikan 0-11 (Januari-Desember)
+            monthlyCounts[month]++;
+        });
+
+        const chartCategories = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        const chartSeriesData = monthlyCounts;
+        // --- AKHIR LOGIKA PEMROSESAN DATA PHP DI DALAM BLADE ---
+
+        var options = {
+            series: [{
+                name: "Jumlah Surat", // Ganti dengan label yang relevan
+                data: chartSeriesData,
+            }],
+            chart: {
+                type: "bar",
+                height: 300,
+                toolbar: {
+                    show: false, // Sembunyikan toolbar jika tidak dibutuhkan
+                },
+            },
+            plotOptions: {
+                bar: {
+                    horizontal: false,
+                    columnWidth: '55%',
+                    endingShape: 'rounded'
+                },
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                show: true,
+                width: 2,
+                colors: ['transparent']
+            },
+            xaxis: {
+                categories: chartCategories,
+                title: {
+                    text: 'Bulan'
+                }
+            },
+            yaxis: {
+                title: {
+                    text: 'Jumlah Surat'
+                }
+            },
+            fill: {
+                opacity: 1
+            },
+            tooltip: {
+                y: {
+                    formatter: function(val) {
+                        return val + " surat"
+                    }
+                }
+            },
+            colors: ["#435ebe"], // Warna bar
+        };
+
+        var chartProfileVisit = new ApexCharts(
+            document.querySelector("#chart-profile-visit"),
+            options
+        )
+        chartProfileVisit.render()
+    </script>
+@endpush
