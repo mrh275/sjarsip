@@ -3,6 +3,7 @@
 use App\Http\Controllers\ArsipController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [LoginController::class, 'index']);
@@ -18,3 +19,6 @@ Route::post('/admin/hapus-arsip', [ArsipController::class, 'hapusArsip']);
 Route::post('/admin/get-surat', [ArsipController::class, 'getSurat']);
 Route::post('/admin/update-arsip', [ArsipController::class, 'updateArsip']);
 Route::post('admin/cetak-laporan', [LaporanController::class, 'cetakLaporan']);
+
+Route::get('admin/profile', [ProfileController::class, 'profile']);
+Route::post('admin/update-profile', [ProfileController::class, 'updateProfile']);
