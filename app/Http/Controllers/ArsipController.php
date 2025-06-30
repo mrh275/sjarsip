@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Arsip;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -17,6 +18,9 @@ class ArsipController extends Controller
         $data = [
             'title' => 'Dashboard',
             'sidebar' => 'dashboard',
+            'total_arsip' => Arsip::count(),
+            'users' => User::count(),
+            'arsips' => Arsip::all()
         ];
 
         return view('admin.dashboard', $data);
