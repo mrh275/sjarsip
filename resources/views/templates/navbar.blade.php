@@ -14,13 +14,12 @@
                 <div class="dropdown">
                     <a href="#" data-bs-toggle="dropdown" aria-expanded="false">
                         <div class="user-menu d-flex">
-                            <div class="user-name text-end me-3">
+                            <div class="user-name text-end me-3 d-flex align-items-center">
                                 <h6 class="mb-0 text-gray-600">{{ session('name') }}</h6>
-                                <p class="mb-0 text-sm text-gray-600">Administrator</p>
                             </div>
                             <div class="user-img d-flex align-items-center">
                                 <div class="avatar avatar-md">
-                                    <img src="{{ asset('assets/compiled/jpg/1.jpg') }}">
+                                    <img src="{{ session('foto_profil') ? asset('assets/img/' . session('foto_profil')) : asset('assets/compiled/jpg/1.jpg') }}" alt="Profile Image" class="rounded-circle">
                                 </div>
                             </div>
                         </div>
@@ -29,16 +28,15 @@
                         <li>
                             <h6 class="dropdown-header">Hello, {{ session('name') }}!</h6>
                         </li>
-                        <li><a class="dropdown-item" href="#"><i class="icon-mid bi bi-person me-2"></i> My
+                        <li><a class="dropdown-item" href="{{ url('admin/profile') }}"><i class="icon-mid fas fa-user me-2"></i> My
                                 Profile</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="icon-mid bi bi-gear me-2"></i>
-                                Settings</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="icon-mid bi bi-wallet me-2"></i>
-                                Wallet</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
+                        <hr class="dropdown-divider">
                         </li>
-                        <li><a class="dropdown-item" href="{{ url('logout') }}"><i class="icon-mid bi bi-box-arrow-left me-2"></i> Logout</a></li>
+                        <li><a class="dropdown-item" href="{{ url('admin/users') }}"><i class="icon-mid fa fa-users me-2"></i>
+                                Pengguna</a></li>
+                        <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="{{ url('logout') }}"><i class="icon-mid fas fa-sign-out-alt me-2"></i> Logout</a></li>
                     </ul>
                 </div>
             </div>
