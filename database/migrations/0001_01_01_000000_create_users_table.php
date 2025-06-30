@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('username')->unique();
             $table->string('name');
             $table->string('password');
+            $table->string('foto_profil')->nullable();
             $table->enum('role', [1, 2]);
             $table->rememberToken();
             $table->timestamps();
