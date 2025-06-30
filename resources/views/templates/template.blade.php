@@ -13,7 +13,7 @@
     @if ($title == 'Login')
         <link rel="stylesheet" crossorigin href="{{ asset('assets/compiled/css/auth.css') }}">
     @endif
-    @if ($sidebar == 'tambah-arsip')
+    @if ($sidebar == 'tambah-arsip' || $sidebar == 'profile')
         <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
         <link rel="stylesheet" href="{{ asset('assets/extensions/filepond/filepond.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/extensions/filepond-plugin-image-preview/filepond-plugin-image-preview.css') }}">
