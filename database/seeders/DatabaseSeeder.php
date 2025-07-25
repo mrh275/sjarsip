@@ -21,9 +21,16 @@ class DatabaseSeeder extends Seeder
             'username' => 'admin',
             'name' => 'Administrator',
             'password' => Hash::make('password'), // Use bcrypt for hashing
+            'role' => 1, // Assuming 1 is the role for admin
+        ]);
+
+        User::create([
+            'username' => 'staf',
+            'name' => 'Staf',
+            'password' => Hash::make('staf'), // Use bcrypt for hashing
             'role' => 2, // Assuming 1 is the role for admin
         ]);
 
-        Arsip::factory(100)->create();
+        // Arsip::factory(100)->create();
     }
 }
