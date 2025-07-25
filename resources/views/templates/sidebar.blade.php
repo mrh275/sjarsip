@@ -29,9 +29,11 @@
                         <span>Data Arsip</span>
                     </a>
                     <ul class="submenu {{ $sidebar == 'tambah-arsip' ? 'submenu-open' : '' }}">
-                        <li class="submenu-item {{ $sidebar == 'tambah-arsip' ? 'active' : '' }}">
-                            <a href="{{ url('admin/tambah-surat') }}">Tambah Arsip Surat</a>
-                        </li>
+                        @if (session('role') == 1)
+                            <li class="submenu-item {{ $sidebar == 'tambah-arsip' ? 'active' : '' }}">
+                                <a href="{{ url('admin/tambah-surat') }}">Tambah Arsip Surat</a>
+                            </li>
+                        @endif
                         <li class="submenu-item {{ $sidebar == 'data-arsip' ? 'active' : '' }}">
                             <a href="{{ url('admin/data-arsip') }}">Data Arsip</a>
                         </li>

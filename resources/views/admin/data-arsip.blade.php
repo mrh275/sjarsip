@@ -75,12 +75,14 @@
                                                         <button type="button" class="btn btn-secondary" id="show" value="{{ url('arsip/surat') . '/' . $arsip->file_surat }}">
                                                             <i class="fa fa-eye"></i>
                                                         </button>
-                                                        <button type="button" class="btn btn-warning" id="edit" data-bs-toggle="modal" data-bs-target="#editModal" value="{{ $arsip->no_surat_jalan }}">
-                                                            <i class="fa fa-edit"></i>
-                                                        </button>
-                                                        <button type="button" class="btn btn-danger" id="delete" value="{{ $arsip->no_surat_jalan }}">
-                                                            <i class="fa fa-trash"></i>
-                                                        </button>
+                                                        @if (session('role') == 1)
+                                                            <button type="button" class="btn btn-warning" id="edit" data-bs-toggle="modal" data-bs-target="#editModal" value="{{ $arsip->no_surat_jalan }}">
+                                                                <i class="fa fa-edit"></i>
+                                                            </button>
+                                                            <button type="button" class="btn btn-danger" id="delete" value="{{ $arsip->no_surat_jalan }}">
+                                                                <i class="fa fa-trash"></i>
+                                                            </button>
+                                                        @endif
                                                     </td>
                                                 </tr>
                                             @endforeach
