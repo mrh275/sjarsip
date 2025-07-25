@@ -35,6 +35,7 @@ class LoginController extends Controller
             $result = Auth::user();
             Session::put('username', $result->username);
             Session::put('name', $result->name);
+            Session::put('role', $result->role);
             return redirect()->to('/admin/dashboard')->with('success', 'Login successful');
         } else {
             return redirect()->back()->with([
