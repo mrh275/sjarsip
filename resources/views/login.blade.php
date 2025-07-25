@@ -14,6 +14,13 @@
                     <h1 class="auth-title" style="font-size: 2rem">Log in.</h1>
                     <p class="auth-subtitle mb-5">Silahkan login terlebih dahulu.</p>
 
+                    @if (session('error'))
+                        <div class="alert alert-light-danger color-danger alert-dismissible fade show" role="alert">
+                            <strong>Login Gagal!</strong> {{ session('error') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+
                     <form action="{{ url('login') }}" method="POST">
                         @csrf
                         <div class="form-group position-relative has-icon-left mb-4">

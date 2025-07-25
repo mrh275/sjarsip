@@ -37,7 +37,9 @@ class LoginController extends Controller
             Session::put('name', $result->name);
             return redirect()->to('/admin/dashboard')->with('success', 'Login successful');
         } else {
-            return redirect()->back()->withErrors(['login' => 'Invalid credentials'])->withInput();
+            return redirect()->back()->with([
+                'error' => 'Username atau password salah',
+            ])->withInput();
         }
     }
 
