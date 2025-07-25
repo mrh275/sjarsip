@@ -59,28 +59,26 @@
                                     <table class="table" id="data-arsip">
                                         <thead>
                                             <tr>
-                                                <th>Kode Surat</th>
                                                 <th>Nomor Surat</th>
                                                 <th>Customer</th>
-                                                <th>Bulan Surat</th>
+                                                <th>Tanggal Surat</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach ($arsips as $arsip)
                                                 <tr>
-                                                    <td id="kode-surat">{{ $arsip->kode_surat }}</td>
-                                                    <td>{{ $arsip->no_surat_jalan }}</td>
+                                                    <td id="nomor_surat_jalan">{{ $arsip->no_surat_jalan }}</td>
                                                     <td>{{ $arsip->customer }}</td>
                                                     <td>{{ date('d-m-Y', strtotime($arsip->tanggal_surat)) }}</td>
                                                     <td>
-                                                        <button type="button" class="btn btn-secondary" id="show" value="{{ url('arsip/surat') . '/' . $arsip->no_surat_jalan . '.png' }}">
+                                                        <button type="button" class="btn btn-secondary" id="show" value="{{ url('arsip/surat') . '/' . $arsip->file_surat }}">
                                                             <i class="fa fa-eye"></i>
                                                         </button>
-                                                        <button type="button" class="btn btn-warning" id="edit" data-bs-toggle="modal" data-bs-target="#editModal" value="{{ $arsip->kode_surat }}">
+                                                        <button type="button" class="btn btn-warning" id="edit" data-bs-toggle="modal" data-bs-target="#editModal" value="{{ $arsip->no_surat_jalan }}">
                                                             <i class="fa fa-edit"></i>
                                                         </button>
-                                                        <button type="button" class="btn btn-danger" id="delete" value="{{ $arsip->kode_surat }}">
+                                                        <button type="button" class="btn btn-danger" id="delete" value="{{ $arsip->no_surat_jalan }}">
                                                             <i class="fa fa-trash"></i>
                                                         </button>
                                                     </td>
@@ -117,14 +115,13 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <span class="badge bg-primary">Kode Surat: <span id="editKodeSurat"></span></span>
+                    <span class="badge bg-primary">Nomor Surat: <span id="editNoSuratJalan"></span></span>
                     <div class="row my-3">
                         <h6>Masukan rincian data surat yang akan diubah</h6>
 
                         <div class="col-12 my-4">
                             <form action="{{ url('admin/update-arsip') }}" method="POST" id="edit-surat" enctype="multipart/form-data">
                                 @csrf
-                                <input type="hidden" name="kode_surat" id="kodeSurat" value="">
                                 <div class="mb-3 form-group">
                                     <label for="no_surat_jalan" class="form-label">Nomor Surat</label>
                                     <input type="text" class="form-control" id="no_surat_jalan" name="no_surat_jalan" required>
@@ -164,7 +161,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <span class="badge bg-primary">Kode Surat: <span id="lampiranKodeSurat"></span></span>
+                    <span class="badge bg-primary">Nomor Surat: <span id="lampiranNomorSurat"></span></span>
                     <div class="row my-3">
                         <h6>Lampiran</h6>
                         <div class="col-12" id="show-content">
@@ -195,55 +192,6 @@
     <script src="{{ asset('assets') }}/extensions/toastify-js/src/toastify.js"></script>
     <script src="{{ asset('assets') }}/static/js/pages/filepond.js"></script>
     <script>
-        // document.getElementById('edit-surat').addEventListener('submit', function(e) {
-        //     e.preventDefault();
-        //     const formData = new FormData(this);
-        //     formData.append('kode_surat', document.getElementById('kodeSurat').textContent);
-        //     Swal.fire({
-        //         title: 'Sedang memperbarui data arsip...',
-        //         allowOutsideClick: false,
-        //         willOpen: () => {
-        //             Swal.showLoading() // Show loading animation
-        //         },
-        //         didOpen: () => {
-        //             $.ajax({
-        //                 url: "{{ url('admin/update-arsip') }}",
-        //                 type: "POST",
-        //                 data: formData,
-        //                 contentType: false,
-        //                 processData: false,
-        //                 success: function(response) {
-        //                     if (response.status == 'success') {
-        //                         Swal.fire(
-        //                             'Updated!',
-        //                             'Data arsip telah diperbarui.',
-        //                             'success'
-        //                         ).then(() => {
-        //                             location.reload();
-        //                         });
-        //                     } else {
-        //                         Swal.fire(
-        //                             'Error!',
-        //                             'Gagal memperbarui data arsip.',
-        //                             'error'
-        //                         );
-        //                     }
-        //                 },
-        //                 error: function() {
-        //                     Swal.fire(
-        //                         'Error!',
-        //                         'Terjadi kesalahan saat memperbarui data arsip.',
-        //                         'error'
-        //                     );
-        //                 }
-        //             });
-        //         },
-        //         didClose: () => {
-        //             Swal.hideLoading() // Hide loading animation
-        //         }
-        //     });
-        // });
-
         // Pastikan skrip ini dijalankan setelah DOM sepenuhnya dimuat dan jQuery tersedia.
         // Menempatkannya di dalam $(document).ready() adalah praktik yang baik jika menggunakan jQuery.
         $(document).ready(function() {
@@ -265,11 +213,11 @@
                         $('#show-content').html('<img src="' + imageUrl + '" class="img-fluid" alt="Lampiran Surat">');
                         // 1. Dapatkan elemen <tr> terdekat (parent dari tombol yang diklik)
                         const row = clickedButton.closest('tr');
-                        // 2. Dari elemen <tr>, cari <td> dengan ID 'kode-surat'
-                        // Penting: Pastikan ID 'kode-surat' ini unik per baris. Jika tidak, pakai class.
-                        const kodeSurat = row.querySelector('#kode-surat');
-                        const labelKodeSurat = document.querySelector('span#lampiranKodeSurat');
-                        labelKodeSurat.textContent = kodeSurat.textContent; // Setel teks pada
+                        // 2. Dari elemen <tr>, cari <td> dengan ID 'nomor_surat_jalan'
+                        // Penting: Pastikan ID 'nomor_surat_jalan' ini unik per baris. Jika tidak, pakai class.
+                        const nomorSurat = row.querySelector('#nomor_surat_jalan');
+                        const labelNomorSurat = document.querySelector('span#lampiranNomorSurat');
+                        labelNomorSurat.textContent = nomorSurat.textContent; // Setel teks pada
                     } else {
                         console.error("Elemen dengan ID 'show-content' tidak ditemukan.");
                     }
@@ -293,13 +241,13 @@
                     console.log("Tombol dengan ID 'delete' ditemukan:", clickedDeleteButton);
 
                     // Mengambil nilai 'value' dari tombol, yang berisi kode surat yang akan dihapus.
-                    const kodeSurat = clickedDeleteButton.getAttribute('value');
-                    console.log("Kode Surat yang akan dihapus:", kodeSurat);
+                    const noSuratJalan = clickedDeleteButton.getAttribute('value');
+                    console.log("Nomor Surat yang akan dihapus:", noSuratJalan);
 
                     // Menampilkan konfirmasi SweetAlert2 sebelum menghapus.
                     // Pastikan SweetAlert2 (Swal) sudah dimuat di halaman Anda.
                     Swal.fire({
-                        title: 'Hapus Arsip No. ' + kodeSurat + '?',
+                        title: 'Hapus Arsip No. ' + noSuratJalan + '?',
                         text: "Apakah Anda yakin ingin menghapus data ini?",
                         icon: 'warning',
                         showCancelButton: true,
@@ -314,7 +262,7 @@
                                 url: "{{ url('admin/hapus-arsip') }}", // Pastikan URL ini sesuai dengan route Anda
                                 type: "POST",
                                 data: {
-                                    kode_surat: kodeSurat,
+                                    no_surat_jalan: noSuratJalan,
                                     // Pastikan CSRF token tersedia. Anda mungkin perlu menyediakannya secara global
                                     // atau memastikan template Blade Anda merendernya dengan benar.
                                     _token: "{{ csrf_token() }}"
@@ -360,16 +308,12 @@
                     console.log("Tombol dengan ID 'edit' ditemukan:", clickedEditButton);
 
                     // Mengambil nilai 'value' dari tombol, yang berisi kode surat untuk diedit.
-                    const kodeSurat = clickedEditButton.getAttribute('value');
-                    console.log("Kode Surat yang akan diedit:", kodeSurat);
-
-                    // Menampilkan kode surat di elemen dengan ID 'kodeSurat' (misal: di dalam modal edit).
-                    if ($('#editKodeSurat').length) {
-                        $('#editKodeSurat').text(kodeSurat);
-                        $('input#kodeSurat').val(kodeSurat); // Mengisi input tersembunyi dengan kode surat
-                        console.log("ID kodeSurat diisi.");
-                    } else {
-                        console.warn("Elemen dengan ID 'kodeSurat' tidak ditemukan untuk menampilkan kode surat.");
+                    const noSuratJalan = clickedEditButton.getAttribute('value');
+                    console.log("Nomor Surat yang akan diedit:", noSuratJalan);
+                    // Mengisi elemen dengan ID 'editNoSuratJalan' dengan nomor surat yang akan diedit.
+                    const editNoSuratJalan = document.querySelector('span#editNoSuratJalan');
+                    if (editNoSuratJalan) {
+                        editNoSuratJalan.textContent = noSuratJalan;
                     }
 
                     // Melakukan permintaan AJAX untuk mendapatkan data arsip.
@@ -377,7 +321,7 @@
                         url: "{{ url('admin/get-surat') }}", // Pastikan URL ini sesuai dengan route Anda
                         type: "POST",
                         data: {
-                            kode_surat: kodeSurat,
+                            no_surat_jalan: noSuratJalan,
                             _token: "{{ csrf_token() }}" // Pastikan CSRF token tersedia
                         },
                         success: function(response) {
