@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('arsips', function (Blueprint $table) {
             $table->id();
-            $table->string('kode_surat')->unique();
-            $table->string('no_surat_jalan');
+            $table->string('no_surat_jalan')->unique();
             $table->string('customer');
             $table->date('tanggal_surat');
+            $table->string('file_surat'); // Store the file name or path
             $table->timestamps();
         });
     }
