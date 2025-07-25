@@ -54,11 +54,10 @@ class ArsipController extends Controller
             'unggah_surat' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048', // Validate file type and size
         ]);
 
-        $credentials['kode_surat'] = '#' . random_int(10000, 99999);
-
         $fileSurat = $request->file('unggah_surat');
         $newFileName = $credentials['no_surat_jalan'] . '.' . $fileSurat->extension();
         $fileSurat->move(public_path('arsip/surat'), $newFileName);
+        $credentials['file_surat'] = $newFileName;
 
         if (Arsip::create($credentials)) {
             return redirect()->to('/admin/data-arsip')->with('success', 'Arsip added successfully.');
@@ -90,9 +89,9 @@ class ArsipController extends Controller
         if (!session()->has('username')) {
             return redirect()->to('/')->with('error', 'You must be logged in to access this page.');
         }
-        $kode_surat = $request->input('kode_surat');
+        $no_surat_jalan = $request->input('no_surat_jalan');
 
-        if (Arsip::where('kode_surat', $kode_surat)->delete()) {
+        if (Arsip::where('no_surat_jalan', $no_surat_jalan)->delete()) {
             return response()->json([
                 'status' => 'success',
                 'message' => 'Arsip deleted successfully.',
@@ -114,8 +113,8 @@ class ArsipController extends Controller
             return redirect()->to('/')->with('error', 'You must be logged in to access this page.');
         }
 
-        $kode_surat = $request->input('kode_surat');
-        $arsip = Arsip::where('kode_surat', $kode_surat)->first();
+        $no_surat_jalan = $request->input('no_surat_jalan');
+        $arsip = Arsip::where('no_surat_jalan', $no_surat_jalan)->first();
 
         if ($arsip) {
             return response()->json([
