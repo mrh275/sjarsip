@@ -14,11 +14,15 @@ class ArsipController extends Controller
         if (!session()->has('username')) {
             return redirect()->to('/')->with('error', 'You must be logged in to access this page.');
         }
+        $jumlahCustomer = Arsip::select('customer')
+            ->distinct()
+            ->count('customer');
 
         $data = [
             'title' => 'Dashboard',
             'sidebar' => 'dashboard',
             'total_arsip' => Arsip::count(),
+            'customer' => $jumlahCustomer,
             'users' => User::count(),
             'arsips' => Arsip::all()
         ];
